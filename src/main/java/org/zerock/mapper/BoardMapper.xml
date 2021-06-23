@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="org.zerock.mapper.BoardMapper">
+
+  <sql id="search">
+    <if test ="arr != null">
+  	<foreach item="tp" collection="arr" separator="OR" open="AND (" close=") ">
+  	
+  		<if test="tp == 't'.toString()">
+  		title like  concat('%',#{keyword},'%')
+  		</if>
+  		<if test="tp == 'c'.toString()">
+  		content like  concat('%',#{keyword},'%')
+  		</if>
+  		<if test="tp == 'w'.toString()">
+  		writer like  concat('%',#{keyword},'%')
+  		</if>
+  		
+  	</foreach>
+  </if> 
+  </sql>	
+
+  <insert id="insert">
+  insert into dbABC.t_boardex (title, content, writer) 
+  values (#{title}, #{content}, #{writer})
+  </insert>
+  
+  <select id="select" resultType="org.zerock.entity.Board">
+  select * from dbABC.t_boardex where bno = #{bno}
+  </select>
+  
+  <select id="getPageList" resultType="org.zerock.entity.Board">
+  select * from dbABC.t_boardex where bno > 0
+  
+  <include refid="search"></include>
+  
+  order by bno  desc 
+    limit #{skip} , #{size}
+  </select>
+  
+  <select id="getCount" resultType="int">
+  select count(bno) from dbABC.t_boardex where bno > 0
+  <include refid="search"></include> 
+  </select>
+  
+</mapper>  
