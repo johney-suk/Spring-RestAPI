@@ -9,20 +9,20 @@ import org.zerock.mapper.GenericMapper;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public abstract class AbstractService<M extends GenericMapper, E, K> implements GenericService {
+public abstract class AbstractService<M extends GenericMapper,E, K>{
 
 	private final M mapper;
-
-	public List<E> getList(PageRequestDTO dto) {
-
+	
+	public List<E> getList(PageRequestDTO dto){
+		
 		return mapper.getPageList(dto);
 	}
-
+	
 	public PageResultDTO getTotal(PageRequestDTO dto) {
-
-		int totalCount = mapper.getCount(dto);
-
+		
+		int totalCount =  mapper.getCount(dto);
+		
 		return new PageResultDTO(dto.getPage(), dto.getSize(), totalCount);
 	}
-
+	
 }
